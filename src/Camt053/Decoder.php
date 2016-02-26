@@ -172,7 +172,20 @@ class Decoder implements DecoderInterface
                 $this->addRemittanceInformationToTransactionDetails($detailXml, $detail);
                 $this->addReturnInformationToTransactionDetails($detailXml, $detail);
                 $this->addAdditionalTransactionInformation($detailXml, $detail);
+                $this->addAmountToTransactionDetails($detailXml, $detail);
                 $entry->addTransactionDetail($detail);
+            }
+        }
+    }
+    
+    private function addAmountToTransactionDetails(SimpleXMLElement $detailXml, EntryTransactionDetail $detail)
+    {
+        if (isset($detailXml->AmtDtls)) {
+            if (isset($detailXml->AmtDtls->InstdAmt->Amt)) {
+                $amount = StringToUnits::convert((string) $detailXml->AmtDtls->InstdAmt->Amt);
+                $currency = (string)$detailXml->AmtDtls->InstdAmt->Amt['Ccy'];
+
+                $detail->addAmount( new Money($amount, new Currency($currency)) );
             }
         }
     }
