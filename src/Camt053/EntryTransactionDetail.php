@@ -138,4 +138,12 @@ class EntryTransactionDetail
         }
         return $this->additionalTransactionInformation;
     }
+    
+    public function addAmount( Money $amount ) {
+        $this->amount = $amount;
+    }
+
+    public function getAmount() {
+        return $this->amount;
+    }
 }
